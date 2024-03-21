@@ -36,8 +36,10 @@ const tick = () => {
   // Fix time
   const elapsedTime = clock.getElapsedTime()
 
-  mesh.rotation.y = elapsedTime * Math.PI * 2; // full rotate in one second (Math.PI * 2)
-  mesh.rotation.x = elapsedTime;
+  mesh.position.y = Math.sin(elapsedTime);
+  mesh.position.x = Math.cos(elapsedTime);
+
+  camera.lookAt(mesh.position)
   
   renderer.render(scene, camera);
 
