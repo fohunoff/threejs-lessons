@@ -13,35 +13,11 @@ const sizes = {
 // Scene
 const scene = new THREE.Scene();
 
-// Groups
-const group = new THREE.Group();
-scene.add(group);
-
-const cube1 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0xff0000 })
-);
-
-const cube2 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x0000ff })
-);
-
-const cube3 = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial({ color: 0x00ff00 })
-);
-
-cube2.position.x = -2
-cube3.position.x = 2
-
-group.add(cube1);
-group.add(cube2);
-group.add(cube3);
-
-// Axes helper
-const axesHelper = new THREE.AxesHelper();
-scene.add(axesHelper);
+// Red cube
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height);
@@ -52,4 +28,28 @@ scene.add(camera);
 const renderer = new THREE.WebGLRenderer({ canvas });
 
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
+
+let time = Date.now();
+
+const getDeltaTime = () => {
+  const currentTime = Date.now();
+  const deltaTime = currentTime - time;
+  time = currentTime;
+
+  return deltaTime;
+}
+
+// Animations
+const tick = () => {
+  // Fix time
+  const deltaTime = getDeltaTime()
+
+  mesh.rotation.y += 0.001 * deltaTime;
+  mesh.rotation.z += 0.001 * deltaTime;
+  
+  renderer.render(scene, camera);
+
+  window.requestAnimationFrame(tick);
+}
+
+tick();
