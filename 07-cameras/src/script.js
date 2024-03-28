@@ -13,6 +13,20 @@ const sizes = {
     height: 600
 }
 
+
+/**
+ * Cursor
+ */
+const cursor = {
+  x: 0,
+  y: 0,
+}
+
+window.addEventListener('mousemove', (evt) => {
+  cursor.x = evt.clientX / sizes.width - 0.5;
+  cursor.y = evt.clientY / sizes.height - 0.5;
+})
+
 // Scene
 const scene = new THREE.Scene()
 
@@ -24,10 +38,10 @@ const mesh = new THREE.Mesh(
 scene.add(mesh)
 
 // Camera
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
-camera.position.x = 2
-camera.position.y = 2
-camera.position.z = 2
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+// camera.position.x = 2
+// camera.position.y = 2
+camera.position.z = 3
 camera.lookAt(mesh.position)
 scene.add(camera)
 
@@ -45,7 +59,12 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
-    mesh.rotation.y = elapsedTime;
+    // mesh.rotation.y = elapsedTime;
+
+    // Update camera
+    camera.position.x = -cursor.x * 10
+    camera.position.y = cursor.y * 10
+    camera.lookAt(mesh.position)
 
     // Render
     renderer.render(scene, camera)
