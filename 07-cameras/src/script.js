@@ -1,6 +1,22 @@
 import './style.css'
+
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import gsap from 'gsap'
+
+import * as dat from 'dat.gui'
+
+/**
+ * Debug
+ */
+const gui = new dat.GUI({ closed: true, width: 400 }); // can pass init panel parameters
+
+const parameters = {
+  color: 0xff0000,
+  spin: () => {
+    gsap.to(mesh.rotation, { duration: 1, y: mesh.rotation.y + Math.PI * 2 })
+  }
+}
 
 /**
  * Base
@@ -28,13 +44,13 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
-window.addEventListener('dblclick', () => {
-  if (!document.fullscreenElement) {
-    canvas.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
-});
+// window.addEventListener('dblclick', () => {
+//   if (!document.fullscreenElement) {
+//     canvas.requestFullscreen();
+//   } else {
+//     document.exitFullscreen();
+//   }
+// });
 
 /**
  * Cursor
@@ -53,45 +69,35 @@ window.addEventListener('mousemove', (evt) => {
 const scene = new THREE.Scene()
 
 // Object
-// const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
+const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
 
-const geometry = new THREE.BufferGeometry();
+const material = new THREE.MeshBasicMaterial({
+  color: parameters.color
+})
 
-// const vertices = new Float32Array([
-//   0, 0, 0, // v0
-//   0, 1, 0, // v1
-//   0, 0, 1, // v2
-// ] );
-
-// geometry.setIndex([0, 1, 2]);
-// geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-
-
-let verticesArray = []
-const count = 5000;
-for (let i = 0; i < count; i++) {
-  verticesArray.push(
-    (Math.random() - 0.5) * 4,
-    (Math.random() - 0.5) * 4,
-    (Math.random() - 0.5) * 4,
-  )
-    
-  const verticesIndex = i * 3
-  geometry.addGroup( verticesIndex, 3, 0 ); // materialIndex 0
-}
-
-const vertices = new Float32Array(verticesArray);
-geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-
-const materials = [
-  new THREE.MeshBasicMaterial({
-    color: 0xff0000,
-    wireframe: true,
-  })
-]
-
-const mesh = new THREE.Mesh(geometry, materials)
+const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
+
+// Debug
+gui
+  .add(mesh.position, 'y')
+  .min(-3)
+  .max(3)
+  .step(0.01)
+  .name('elevation');
+
+gui
+  .add(mesh, 'visible');
+
+gui
+  .add(material, 'wireframe');
+
+gui
+  .addColor(parameters, 'color')
+  .onChange(() => material.color.set(parameters.color))
+
+gui
+  .add(parameters, 'spin')
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
