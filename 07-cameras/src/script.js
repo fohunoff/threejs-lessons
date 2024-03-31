@@ -57,21 +57,42 @@ const scene = new THREE.Scene()
 
 const geometry = new THREE.BufferGeometry();
 
-const vertices = new Float32Array([
-  0, 0, 0, // v0
-  0, 1, 0, // v1
-  0, 0, 1, // v2
-] );
+// const vertices = new Float32Array([
+//   0, 0, 0, // v0
+//   0, 1, 0, // v1
+//   0, 0, 1, // v2
+// ] );
 
-geometry.setIndex([0, 1, 2]);
+// geometry.setIndex([0, 1, 2]);
+// geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+
+
+let verticesArray = []
+
+for (let i = 0; i < 50; i++) {
+  for (let j = 0; j < 3; j++) {
+    verticesArray.push(
+      (Math.random() - 0.5) * 4,
+      (Math.random() - 0.5) * 4,
+      (Math.random() - 0.5) * 4,
+    )
+  }
+  
+  const verticesIndex = i * 3
+  geometry.addGroup( verticesIndex, 3, 0 ); // materialIndex 0
+}
+
+const vertices = new Float32Array(verticesArray);
 geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
 
-const material = new THREE.MeshBasicMaterial({
-  color: 0xff0000,
-  wireframe: true,
-})
+const materials = [
+  new THREE.MeshBasicMaterial({
+    color: 0xff0000,
+    wireframe: true,
+  })
+]
 
-const mesh = new THREE.Mesh(geometry, material)
+const mesh = new THREE.Mesh(geometry, materials)
 scene.add(mesh)
 
 // Camera
