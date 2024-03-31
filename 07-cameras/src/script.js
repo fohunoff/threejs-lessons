@@ -96,8 +96,12 @@ gui
   .addColor(parameters, 'color')
   .onChange(() => material.color.set(parameters.color))
 
-gui
+const folderAnimation = gui.addFolder('Animations');
+folderAnimation.open();
+
+folderAnimation
   .add(parameters, 'spin')
+  .name('gsap spin animation')
 
 // Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
