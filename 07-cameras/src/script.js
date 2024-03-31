@@ -68,16 +68,14 @@ const geometry = new THREE.BufferGeometry();
 
 
 let verticesArray = []
-
-for (let i = 0; i < 50; i++) {
-  for (let j = 0; j < 3; j++) {
-    verticesArray.push(
-      (Math.random() - 0.5) * 4,
-      (Math.random() - 0.5) * 4,
-      (Math.random() - 0.5) * 4,
-    )
-  }
-  
+const count = 5000;
+for (let i = 0; i < count; i++) {
+  verticesArray.push(
+    (Math.random() - 0.5) * 4,
+    (Math.random() - 0.5) * 4,
+    (Math.random() - 0.5) * 4,
+  )
+    
   const verticesIndex = i * 3
   geometry.addGroup( verticesIndex, 3, 0 ); // materialIndex 0
 }
