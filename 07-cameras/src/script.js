@@ -53,13 +53,25 @@ window.addEventListener('mousemove', (evt) => {
 const scene = new THREE.Scene()
 
 // Object
-const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1, 5, 5, 5),
-    new THREE.MeshBasicMaterial({
-      color: 0xff0000,
-      wireframe: true,
-    })
-)
+// const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
+
+const geometry = new THREE.BufferGeometry();
+
+const vertices = new Float32Array([
+  0, 0, 0, // v0
+  0, 1, 0, // v1
+  0, 0, 1, // v2
+] );
+
+geometry.setIndex([0, 1, 2]);
+geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+
+const material = new THREE.MeshBasicMaterial({
+  color: 0xff0000,
+  wireframe: true,
+})
+
+const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
 // Camera
