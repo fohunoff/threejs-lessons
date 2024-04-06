@@ -10,15 +10,19 @@ import * as dat from 'dat.gui'
  * Texture
  */
 
-const image = new Image()
-const texture = new THREE.Texture(image);
-
-image.onload = () => {
-  texture.needsUpdate = true;
-}
-
-image.src = '/textures/door/color.jpg';
-
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load(
+  '/textures/door/color.jpg',
+  () => {
+    console.log('load finish');
+  },
+  () => {
+    console.log('progress');
+  },
+  () => {
+    console.log('error');
+  },
+);
 
 /**
  * Debug
