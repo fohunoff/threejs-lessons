@@ -10,19 +10,20 @@ import * as dat from 'dat.gui'
  * Texture
  */
 
-const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load(
-  '/textures/door/color.jpg',
-  () => {
-    console.log('load finish');
-  },
-  () => {
-    console.log('progress');
-  },
-  () => {
-    console.log('error');
-  },
-);
+const loadingManager = new THREE.LoadingManager();
+const textureLoader = new THREE.TextureLoader(loadingManager);
+
+const colorTexture = textureLoader.load('/textures/door/color.jpg');
+const alphaTexture = textureLoader.load('/textures/door/alpha.jpg');
+const heightTexture = textureLoader.load('/textures/door/height.jpg');
+const normalTexture = textureLoader.load('/textures/door/normal.jpg');
+const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg');
+const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
+const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
+
+loadingManager.onProgress = () => {
+  console.log('on progress');
+}
 
 /**
  * Debug
@@ -87,10 +88,10 @@ window.addEventListener('mousemove', (evt) => {
 const scene = new THREE.Scene()
 
 // Object
-const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
+const geometry = new THREE.BoxBufferGeometry(1, 1, 1);
 
 const material = new THREE.MeshBasicMaterial({
-  map: texture
+  map: colorTexture
 })
 
 const mesh = new THREE.Mesh(geometry, material)
