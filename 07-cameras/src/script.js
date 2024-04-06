@@ -7,6 +7,20 @@ import gsap from 'gsap'
 import * as dat from 'dat.gui'
 
 /**
+ * Texture
+ */
+
+const image = new Image()
+const texture = new THREE.Texture(image);
+
+image.onload = () => {
+  texture.needsUpdate = true;
+}
+
+image.src = '/textures/door/color.jpg';
+
+
+/**
  * Debug
  */
 const gui = new dat.GUI({ closed: true, width: 400 }); // can pass init panel parameters
@@ -72,7 +86,7 @@ const scene = new THREE.Scene()
 const geometry = new THREE.BoxGeometry(1, 1, 1, 5, 5, 5);
 
 const material = new THREE.MeshBasicMaterial({
-  color: parameters.color
+  map: texture
 })
 
 const mesh = new THREE.Mesh(geometry, material)
