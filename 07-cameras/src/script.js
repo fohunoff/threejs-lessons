@@ -13,7 +13,7 @@ import * as dat from 'dat.gui'
 const loadingManager = new THREE.LoadingManager();
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
-const colorTexture = textureLoader.load('/textures/door/color.jpg');
+const colorTexture = textureLoader.load('/textures/checkerboard-8x8.png');
 const alphaTexture = textureLoader.load('/textures/door/alpha.jpg');
 const heightTexture = textureLoader.load('/textures/door/height.jpg');
 const normalTexture = textureLoader.load('/textures/door/normal.jpg');
@@ -21,16 +21,19 @@ const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclus
 const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
 const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
 
-colorTexture.repeat.x = 2;
-colorTexture.repeat.y = 2;
-colorTexture.wrapS = THREE.MirroredRepeatWrapping;
-colorTexture.wrapT = THREE.RepeatWrapping;
+// colorTexture.repeat.x = 2;
+// colorTexture.repeat.y = 2;
+// colorTexture.wrapS = THREE.MirroredRepeatWrapping;
+// colorTexture.wrapT = THREE.RepeatWrapping;
 
-colorTexture.offset.x = 0.5;
+// colorTexture.offset.x = 0.5;
 
-colorTexture.center.x = 0.5;
-colorTexture.center.y = 0.5;
-colorTexture.rotation = Math.PI / 4;
+// colorTexture.center.x = 0.5;
+// colorTexture.center.y = 0.5;
+// colorTexture.rotation = Math.PI / 4;
+
+// colorTexture.minFilter = THREE.NearestFilter
+colorTexture.magFilter = THREE.NearestFilter
 
 loadingManager.onProgress = () => {
   console.log('on progress');
