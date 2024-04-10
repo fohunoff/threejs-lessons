@@ -40,7 +40,10 @@ const scene = new THREE.Scene()
 // material.alphaMap = doorAlphaTexture;
 // material.side = THREE.DoubleSide; //  THREE.FrontSide, THREE.BackSide, THREE.DoubleSide
 
-const material = new THREE.MeshNormalMaterial();
+// const material = new THREE.MeshNormalMaterial();
+
+const material = new THREE.MeshMatcapMaterial(); // можно сказать, что это симулирует свет
+material.matcap = matcapTexture;
 
 const sphere = new THREE.Mesh(
   new THREE.SphereBufferGeometry(0.5, 16, 16),
