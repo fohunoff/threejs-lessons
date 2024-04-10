@@ -10,6 +10,7 @@ const gui = new dat.GUI({ closed: false, width: 400 }); // can pass init panel p
  * Texture
  */
 const textureLoader = new THREE.TextureLoader();
+const cubeTextureLoader = new THREE.CubeTextureLoader();
 
 const doorColorTexture = textureLoader.load('/textures/door/color.jpg');
 const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg');
@@ -25,6 +26,18 @@ const gradientTexture = textureLoader.load('/textures/gradients/3.jpg');
 gradientTexture.minFilter = THREE.NearestFilter;
 gradientTexture.magFilter = THREE.NearestFilter;
 gradientTexture.generateMipmaps = false;
+
+// Порядок важен! p - positive, n - negative
+const environmentMapTexture = cubeTextureLoader.load([
+  'textures/environmentMaps/0/px.jpg',
+  'textures/environmentMaps/0/nx.jpg',
+
+  'textures/environmentMaps/0/py.jpg',
+  'textures/environmentMaps/0/ny.jpg',
+
+  'textures/environmentMaps/0/pz.jpg',
+  'textures/environmentMaps/0/nz.jpg',
+]);
 
 /**
  * Base
@@ -64,48 +77,38 @@ const scene = new THREE.Scene()
 // const material = new THREE.MeshToonMaterial();
 // material.gradientMap = gradientTexture;
 
+// const material = new THREE.MeshStandardMaterial();
+// material.map = doorColorTexture;
+// material.aoMap = doorAmbientOcclusionTexture;
+// material.aoMapIntensity = 1;
+
+// material.displacementMap = doorHeightTexture;
+// material.displacementScale = 0.05
+
+// material.metalness = 0; // значение по дефолту
+// material.roughness = 1; // значение по дефолту
+// material.metalnessMap = doorMetalnessTexture;
+// material.roughnessMap = doorRoughnessTexture;
+
+// material.normalMap = doorNormalTexture;
+// material.normalScale.set(0.5, 0.5); // можно регулировать глубину карты нормальны
+
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture; // не будет работать без transparent = true
+
+// gui.add(material, 'metalness').min(0).max(1).step(0.0001);
+// gui.add(material, 'roughness').min(0).max(1).step(0.0001);
+// gui.add(material, 'aoMapIntensity').min(0).max(2).step(0.0001);
+// gui.add(material, 'displacementScale').min(0).max(1).step(0.0001);
+
 const material = new THREE.MeshStandardMaterial();
-material.map = doorColorTexture;
-material.aoMap = doorAmbientOcclusionTexture;
-material.aoMapIntensity = 1;
+material.metalness = 0.7;
+material.roughness = 0.2;
 
-material.displacementMap = doorHeightTexture;
-material.displacementScale = 0.05
+material.envMap = environmentMapTexture;
 
-material.metalness = 0; // значение по дефолту
-material.roughness = 1; // значение по дефолту
-material.metalnessMap = doorMetalnessTexture;
-material.roughnessMap = doorRoughnessTexture;
-
-material.normalMap = doorNormalTexture;
-material.normalScale.set(0.5, 0.5); // можно регулировать глубину карты нормальны
-
-material.transparent = true;
-material.alphaMap = doorAlphaTexture; // не будет работать без transparent = true
-
-gui
-  .add(material, 'metalness')
-  .min(0)
-  .max(1)
-  .step(0.0001);
-
-gui
-  .add(material, 'roughness')
-  .min(0)
-  .max(1)
-  .step(0.0001)
-
-gui
-  .add(material, 'aoMapIntensity')
-  .min(0)
-  .max(2)
-  .step(0.0001)
-
-gui
-  .add(material, 'displacementScale')
-  .min(0)
-  .max(1)
-  .step(0.0001)
+gui.add(material, 'metalness').min(0).max(1).step(0.0001);
+gui.add(material, 'roughness').min(0).max(1).step(0.0001);
 
 const sphere = new THREE.Mesh(
   new THREE.SphereBufferGeometry(0.5, 64, 46),
