@@ -2,6 +2,10 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+import * as dat from 'dat.gui';
+
+const gui = new dat.GUI({ closed: false, width: 400 }); // can pass init panel parameters
+
 /**
  * Texture
  */
@@ -57,23 +61,54 @@ const scene = new THREE.Scene()
 // material.shininess = 100;
 // material.specular = new THREE.Color(0x1188ff);
 
-const material = new THREE.MeshToonMaterial();
-material.gradientMap = gradientTexture;
+// const material = new THREE.MeshToonMaterial();
+// material.gradientMap = gradientTexture;
+
+const material = new THREE.MeshStandardMaterial();
+material.metalness = 0.45;
+material.roughness = 0.65;
+material.map = doorColorTexture;
+material.aoMap = doorAmbientOcclusionTexture;
+material.aoMapIntensity = 1;
+
+gui
+  .add(material, 'metalness')
+  .min(0)
+  .max(1)
+  .step(0.0001);
+
+gui
+  .add(material, 'roughness')
+  .min(0)
+  .max(1)
+  .step(0.0001)
+
+gui
+  .add(material, 'aoMapIntensity')
+  .min(0)
+  .max(2)
+  .step(0.0001)
 
 const sphere = new THREE.Mesh(
   new THREE.SphereBufferGeometry(0.5, 16, 16),
   material
 )
 
+sphere.geometry.setAttribute('uv2', new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2))
+
 const plane = new THREE.Mesh(
   new THREE.PlaneBufferGeometry(1, 1),
   material
 )
 
+plane.geometry.setAttribute('uv2', new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2))
+
 const torus = new THREE.Mesh(
   new THREE.TorusBufferGeometry(0.3, 0.1, 16, 32),
   material
 )
+
+torus.geometry.setAttribute('uv2', new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2))
 
 sphere.position.x = -1.5
 torus.position.x = 1.5
