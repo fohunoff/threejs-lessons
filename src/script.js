@@ -30,17 +30,17 @@ const scene = new THREE.Scene()
 /**
  * Objects
  */
-const material = new THREE.MeshBasicMaterial({
-  // map: doorColorTexture
-});
+// const material = new THREE.MeshBasicMaterial();
 
-material.map = doorColorTexture;
+// material.map = doorColorTexture;
 // material.color = new THREE.Color('green');
 // material.wireframe = true;
-material.transparent = true;
+// material.transparent = true;
 // material.opacity = 0.5;
-material.alphaMap = doorAlphaTexture;
-material.side = THREE.DoubleSide; //  THREE.FrontSide, THREE.BackSide, THREE.DoubleSide
+// material.alphaMap = doorAlphaTexture;
+// material.side = THREE.DoubleSide; //  THREE.FrontSide, THREE.BackSide, THREE.DoubleSide
+
+const material = new THREE.MeshNormalMaterial();
 
 const sphere = new THREE.Mesh(
   new THREE.SphereBufferGeometry(0.5, 16, 16),
