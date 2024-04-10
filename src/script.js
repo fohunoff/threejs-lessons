@@ -42,8 +42,10 @@ const scene = new THREE.Scene()
 
 // const material = new THREE.MeshNormalMaterial();
 
-const material = new THREE.MeshMatcapMaterial(); // можно сказать, что это симулирует свет
-material.matcap = matcapTexture;
+// const material = new THREE.MeshMatcapMaterial(); // можно сказать, что это симулирует свет
+// material.matcap = matcapTexture;
+
+// const material = new THREE.MeshDepthMaterial(); // Like SilentHill effect
 
 const sphere = new THREE.Mesh(
   new THREE.SphereBufferGeometry(0.5, 16, 16),
