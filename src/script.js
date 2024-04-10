@@ -3,6 +3,22 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
+ * Texture
+ */
+const textureLoader = new THREE.TextureLoader();
+
+const doorColorTexture = textureLoader.load('/textures/door/color.jpg');
+const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg');
+const doorAmbientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg');
+const doorHeightTexture = textureLoader.load('/textures/door/height.jpg');
+const doorMetalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
+const doorNormalTexture = textureLoader.load('/textures/door/normal.jpg');
+const doorRoughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
+
+const matcapTexture = textureLoader.load('/textures/matcaps/1.png');
+const gradientTexture = textureLoader.load('/textures/gradients/3.jpg');
+
+/**
  * Base
  */
 // Canvas
@@ -10,6 +26,41 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+/**
+ * Objects
+ */
+const material = new THREE.MeshBasicMaterial({
+  // map: doorColorTexture
+});
+
+material.map = doorColorTexture;
+// material.color = new THREE.Color('green');
+// material.wireframe = true;
+material.transparent = true;
+// material.opacity = 0.5;
+material.alphaMap = doorAlphaTexture;
+material.side = THREE.DoubleSide; //  THREE.FrontSide, THREE.BackSide, THREE.DoubleSide
+
+const sphere = new THREE.Mesh(
+  new THREE.SphereBufferGeometry(0.5, 16, 16),
+  material
+)
+
+const plane = new THREE.Mesh(
+  new THREE.PlaneBufferGeometry(1, 1),
+  material
+)
+
+const torus = new THREE.Mesh(
+  new THREE.TorusBufferGeometry(0.3, 0.1, 16, 32),
+  material
+)
+
+sphere.position.x = -1.5
+torus.position.x = 1.5
+
+scene.add(sphere, plane, torus);
 
 /**
  * Sizes
@@ -65,6 +116,12 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Update objects
+    Array.from([sphere, plane, torus]).forEach(mesh => {
+      mesh.rotation.y = 0.1 * elapsedTime;
+      mesh.rotation.x = 0.15 * elapsedTime;
+    })
 
     // Update controls
     controls.update()
