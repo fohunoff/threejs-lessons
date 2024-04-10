@@ -77,6 +77,11 @@ material.roughness = 1; // значение по дефолту
 material.metalnessMap = doorMetalnessTexture;
 material.roughnessMap = doorRoughnessTexture;
 
+material.normalMap = doorNormalTexture;
+material.normalScale.set(0.5, 0.5); // можно регулировать глубину карты нормальны
+
+material.transparent = true;
+material.alphaMap = doorAlphaTexture; // не будет работать без transparent = true
 
 gui
   .add(material, 'metalness')
