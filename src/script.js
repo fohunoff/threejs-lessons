@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'lil-gui'
+import * as dat from 'dat.gui'
 
 /**
  * Base
@@ -18,9 +18,30 @@ const scene = new THREE.Scene()
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+// const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // ... or
+const ambientLight = new THREE.AmbientLight();
+ambientLight.color = new THREE.Color(0xffffff);
+ambientLight.intensity = 0.5;
 scene.add(ambientLight);
 
+gui.add(ambientLight, 'intensity').min(0).max(1).step(0.01);
+
+const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
+directionalLight.position.set(1, 0.25, 0)
+scene.add(directionalLight);
+
+const hemisphereLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 1)
+scene.add(hemisphereLight);
+
+const pointLight = new THREE.PointLight(0xff9000, 0.5);
+pointLight.distance = 3;
+pointLight.decay = 2;
+pointLight.position.set(1, -0.5, 1);
+scene.add(pointLight);
+
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 2, 3, 3); // color, intensity, width, height
+rectAreaLight.position.set(1,2, 1);
+scene.add(rectAreaLight);
 
 
 /**
