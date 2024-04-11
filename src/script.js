@@ -17,6 +17,19 @@ const scene = new THREE.Scene()
 
 /**
  * Lights
+ * 
+ * -- Less
+ * AmbientLight
+ * HemisphereLight
+ * 
+ * -- Medium
+ * DirectionalLight
+ * PointLight
+ * 
+ * -- High
+ * RectAreaLight
+ * SpotLight
+ * 
  */
 // const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // ... or
 const ambientLight = new THREE.AmbientLight();
@@ -26,23 +39,32 @@ scene.add(ambientLight);
 
 gui.add(ambientLight, 'intensity').min(0).max(1).step(0.01);
 
+const hemisphereLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 1)
+scene.add(hemisphereLight);
+
 const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.3);
 directionalLight.position.set(1, 0.25, 0)
 scene.add(directionalLight);
 
-const hemisphereLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 1)
-scene.add(hemisphereLight);
-
-const pointLight = new THREE.PointLight(0xff9000, 0.5);
+const pointLight = new THREE.PointLight(0xff9000, 0.5); // (color, intensity, distance, decay)
 pointLight.distance = 3;
 pointLight.decay = 2;
 pointLight.position.set(1, -0.5, 1);
 scene.add(pointLight);
 
-const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 2, 3, 3); // color, intensity, width, height
-rectAreaLight.position.set(1,2, 1);
+// work only with MeshStandardMaterial and MeshPhysicalMaterial
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 2, 1, 1); // color, intensity, width, height
+rectAreaLight.position.set(-1.5, 0, 1.5);
+rectAreaLight.lookAt(new THREE.Vector3());
 scene.add(rectAreaLight);
 
+const spotlight = new THREE.SpotLight(0x78ff00, 0.5, 10, Math.PI * 0.1, 0.25, 1); // color, intensity, distance, angle, penumbra (blur circle edge), decay
+spotlight.position.set(0, 2, 3)
+scene.add(spotlight);
+
+// need add target if want to move spotlight
+spotlight.target.position.x = -0.75;
+scene.add(spotlight.target);
 
 /**
  * Objects
