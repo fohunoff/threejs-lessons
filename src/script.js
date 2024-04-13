@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'lil-gui'
+import * as dat from 'dat.gui'
 
 /**
  * Base
@@ -23,15 +23,90 @@ const textureLoader = new THREE.TextureLoader()
 /**
  * House
  */
-// Temporary sphere
-const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 32, 32),
-    new THREE.MeshStandardMaterial({ roughness: 0.7 })
-)
-sphere.position.y = 1
-scene.add(sphere)
+// Group
+const house = new THREE.Group();
+scene.add(house);
 
-// Floor
+// Walls
+const WALLS_BOX_WIDTH = 4;
+const WALLS_BOX_HEIGHT = 2.5;
+const walls = new THREE.Mesh(
+    new THREE.BoxBufferGeometry(WALLS_BOX_WIDTH, WALLS_BOX_HEIGHT, WALLS_BOX_WIDTH),
+    new THREE.MeshStandardMaterial({ color: '#ac8e82' })
+);
+walls.position.y = WALLS_BOX_HEIGHT / 2
+house.add(walls);
+
+// Roof
+const ROOF_WIDTH = 3.5;
+const ROOF_HEIGHT = 2;
+const roof = new THREE.Mesh(
+    new THREE.ConeBufferGeometry(ROOF_WIDTH, ROOF_HEIGHT, 4),
+    new THREE.MeshStandardMaterial({ color: '#b35f45' })
+);
+roof.rotation.y = Math.PI * 0.25;
+roof.position.y = WALLS_BOX_HEIGHT + 1; // 1 - half og cone height
+house.add(roof);
+
+// Door
+const DOOR_WIDTH = 1.5;
+const DOOR_HEIGHT = 2;
+const door = new THREE.Mesh(
+    new THREE.PlaneBufferGeometry(DOOR_WIDTH, DOOR_HEIGHT),
+    new THREE.MeshStandardMaterial({ color: 'aa7b7b' })
+)
+door.position.y = DOOR_HEIGHT / 2;
+door.position.z = WALLS_BOX_WIDTH / 2 + 0.01
+house.add(door);
+
+// Bushes
+const bushGeometry = new THREE.SphereBufferGeometry(1, 16, 16);
+const bushMaterial = new THREE.MeshStandardMaterial({ color: '#89c854' });
+
+const bush1 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush1.scale.set(0.5, 0.5, 0.5);
+bush1.position.set(0.8, 0.2, 2.2);
+
+const bush2 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush2.scale.set(0.25, 0.25, 0.25);
+bush2.position.set(1.4, 0.1, 2.1);
+
+const bush3 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush3.scale.set(0.4, 0.4, 0.4);
+bush3.position.set(-0.8, 0.1, 2.2);
+
+const bush4 = new THREE.Mesh(bushGeometry, bushMaterial);
+bush4.scale.set(0.15, 0.15, 0.15);
+bush4.position.set(-1, 0.05, 2.6);
+
+scene.add(bush1, bush2, bush3, bush4)
+
+// Graves
+const graves = new THREE.Group();
+scene.add(graves);
+
+const GRAVE_WIDTH = 0.6;
+const GRAVE_HEIGHT = 0.8;
+const GRAVE_DEPTH = 0.2;
+const graveGeometry = new THREE.BoxBufferGeometry(GRAVE_WIDTH, GRAVE_HEIGHT, GRAVE_DEPTH);
+const graveMaterial = new THREE.MeshStandardMaterial({ color: '#cccccc' });
+
+for (let i = 0; i < 25; i++) {
+  const angel = Math.random() * Math.PI * 2;
+  const radius = WALLS_BOX_WIDTH + Math.random() * 6;
+  const x = Math.sin(angel) * radius;
+  const z = Math.cos(angel) * radius;
+
+  const grave = new THREE.Mesh(graveGeometry, graveMaterial);
+  grave.position.set(x, GRAVE_HEIGHT / 2 - 0.1, z);
+  grave.rotation.y = (Math.random() - 0.5) * 0.5;
+  grave.rotation.z = (Math.random() - 0.5) * 0.5;
+  graves.add(grave);
+}
+
+/**
+ * Floor
+ */
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 20),
     new THREE.MeshStandardMaterial({ color: '#a9c388' })
